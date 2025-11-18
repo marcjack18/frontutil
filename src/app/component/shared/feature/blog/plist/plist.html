@@ -1,11 +1,26 @@
 <h1>Blog</h1>
 
-<!-- Botonera con @for      -->
-<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-    @for (strBotonera of oBotonera; track strBotonera ) {
-    <button type="button" class="btn btn-primary">{{ strBotonera }}</button>
-    }
-</div>
+<nav>
+    <ul class="pagination">
+        <li class="page-item">
+            <a class="page-link" (click)="goToPage(numPage-1)">Previous</a>
+        </li>
+        @for (strBotonera of oBotonera; track strBotonera ) {
+
+        @if (strBotonera=='...'){
+        <li class="page-item"><span class="page-link">{{strBotonera}}</span></li>
+        } @else {
+        <li class="page-item" [class.active]="-(-strBotonera) ==(numPage + 1)">
+            <a class="page-link" (click)="goToPage((-(-strBotonera))-1)">{{strBotonera}}</a>
+        </li>
+        }
+
+        }
+        <li class="page-item">
+            <a class="page-link" (click)="goToPage(numPage+1)">Next</a>
+        </li>
+    </ul>
+</nav>
 
 <table class="table">
     <thead>
