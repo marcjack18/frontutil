@@ -154,6 +154,7 @@ import { RoutedAdminEditZanon } from './component/zanon/routed-admin-edit/routed
 import { RoutedAdminNewZanon } from './component/zanon/routed-admin-new/routed-admin-new';
 import { RoutedAdminRemoveZanon } from './component/zanon/routed-admin-remove/routed-admin-remove';
 import { AdminGuard } from './guards/admin.guard';
+import { PallasPreview } from './component/pallas/pallas-preview/pallas-preview';
 //
 export const routes: Routes = [
   { path: '', component: Home },
@@ -251,12 +252,13 @@ export const routes: Routes = [
   { path: 'receta/edit/:id', component: SalinasRoutedAdminEdit },
   { path: 'receta/remove/:id', component: SalinasRoutedAdminRemove },
   //
-  { path: 'pallas/plist', component: PallasPlist },
+  { path: 'pallas/plist', component: PallasPlist, canActivate: [AdminGuard]},
   { path: 'pallas/new', component: PallasNew },
   { path: 'pallas/view/:id', component: PallasView },
-  { path: 'pallas/edit/:id', component: PallasUpdate },
-  { path: 'pallas/remove/:id', component: PallasRemove },
-  { path: 'pallas', component: PallasHome },
+  { path: 'pallas/preview', component: PallasPreview },
+  { path: 'pallas/edit/:id', component: PallasUpdate, canActivate: [AdminGuard]},
+  { path: 'pallas/remove/:id', component: PallasRemove, canActivate: [AdminGuard] },
+  { path: 'pallas', component: PallasHome},
   //
   { path: 'alfonso', component: RoutedAlfonsoUserPlist },
   { path: 'alfonso/respuesta/:id', component: RoutedAlfonsoUserView },

@@ -21,7 +21,8 @@ export class PallasPlist implements OnInit {
   nPage: number = 0;   // Página actual
   nRpp: number = 10;   // Registros por página
   strResult: string = ""; // Mensajes para el usuario
-
+  filter: string = ""; // Filtro de búsqueda
+  
   constructor(
     private oPallasService: PallasService
   ) { }
@@ -32,10 +33,10 @@ export class PallasPlist implements OnInit {
   }
 
   getPage() {
-    this.oPallasService.getPage(this.nPage, this.nRpp).subscribe({
+    this.oPallasService.getPage(this.nPage, this.nRpp,'id','asc',this.filter).subscribe({
       next: (data: IPage<IPallas>) => {
         this.oPage = data;
-        
+
         // Comprobación de seguridad
         if (this.nPage > 0 && this.nPage >= data.totalPages) {
           this.nPage = data.totalPages - 1;
@@ -73,4 +74,11 @@ export class PallasPlist implements OnInit {
     this.nRpp = nRpp;
     this.getPage();
   }
+
+  onFilterChange(filter: string) {
+    this.filter = filter;
+    this.nPage = 0;
+    this.getPage();
+  }
+
 }

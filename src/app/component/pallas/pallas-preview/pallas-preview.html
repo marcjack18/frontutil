@@ -1,0 +1,89 @@
+<div class="container py-5">
+
+  <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+
+    <!-- HEADER -->
+    <div class="card-header bg-white border-0 py-4 px-4">
+      <h2 class="mb-1 fw-bold text-primary gradient-text">
+        📰 Últimas notas
+      </h2>
+      <p class="text-muted mb-0 small">
+        Descubre algunas ideas recientes publicadas
+      </p>
+    </div>
+
+    <!-- BODY -->
+    <div class="card-body bg-light bg-opacity-25">
+      <div class="row px-3">
+
+        @for (nota of arrPallas; track nota.id) {
+          <div class="col-md-4 mb-4">
+
+            <div class="card h-100 shadow-sm border-0 rounded-4">
+
+              <div class="card-body d-flex flex-column">
+
+                <h5 class="fw-bold text-dark mb-2">
+                  {{ nota.titulo }}
+                </h5>
+
+                <p class="text-muted small flex-grow-1">
+                  {{ nota.contenido }}...
+                </p>
+
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                  <small class="text-secondary">
+                    <i class="bi bi-calendar-event me-1"></i>
+                    {{ nota.fechaCreacion | date:'dd/MM/yyyy' }}
+                  </small>
+
+                  <span class="badge bg-success-subtle text-success border border-success-subtle px-3">
+                    Publicado
+                  </span>
+                </div>
+
+              </div>
+
+              <div class="card-footer bg-white border-0 text-end">
+                <a class="btn btn-sm btn-outline-primary rounded-pill px-3"
+                   [routerLink]="['/pallas/view', nota.id]">
+                  Leer más →
+                </a>
+              </div>
+
+            </div>
+
+          </div>
+        }
+
+        @if (!arrPallas || arrPallas.length === 0) {
+          <div class="col-12 text-center py-5 opacity-50">
+            <i class="bi bi-folder-x fs-1 mb-2"></i>
+            <h5>No se encontraron notas</h5>
+            <p class="small text-muted">
+              Prueba a generar notas nuevas o revisa más tarde.
+            </p>
+          </div>
+        }
+
+      </div>
+    </div>
+  </div>
+<div class="card-footer bg-white border-0 py-3">
+      <div class="d-flex justify-content-center">
+        <app-paginacion 
+            [numPage]="oPage ? oPage.number : 0"
+            [numPages]="oPage ? oPage.totalPages : 0"
+            (pageChange)="onSetPage($event)">
+        </app-paginacion>
+      </div>
+    </div>
+
+</div>
+
+<!-- MENSAJE DE ERROR -->
+@if (strResult) {
+  <p class="text-center text-muted mt-4">
+    {{ strResult }}
+  </p>
+}
