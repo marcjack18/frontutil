@@ -4,10 +4,12 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { BlogService } from '../../../service/blog';
 import { IBlog } from '../../../model/blog';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
     selector: 'app-routed-admin-edit',
-    imports: [ReactiveFormsModule, RouterLink],
+    imports: [ReactiveFormsModule, RouterLink, MatDialogModule],
     templateUrl: './routed-admin-edit.html',
     styleUrl: './routed-admin-edit.css',
 })
@@ -16,6 +18,7 @@ export class RoutedAdminEdit implements OnInit {
     private route = inject(ActivatedRoute);
     private router = inject(Router);
     private blogService = inject(BlogService);
+    private dialog = inject(MatDialog);
 
     blogForm!: FormGroup;
     blogId: number | null = null;
@@ -97,6 +100,20 @@ export class RoutedAdminEdit implements OnInit {
             },
         });
     }
+
+        // Guard: ask confirmation if the form has unsaved changes
+        canDeactivate(): boolean | Promise<boolean> | import("rxjs").Observable<boolean> {
+            if (!this.blogForm || !this.blogForm.dirty) {
+                return true;
+            }
+            const ref = this.dialog.open(ConfirmDialogComponent, {
+                data: {
+                    title: 'Cambios sin guardar',
+                    message: 'Hay cambios sin guardar. ¿Desea salir sin guardar los cambios?'
+                }
+            });
+            return ref.afterClosed();
+        }
 
     get titulo() {
         return this.blogForm.get('titulo');
