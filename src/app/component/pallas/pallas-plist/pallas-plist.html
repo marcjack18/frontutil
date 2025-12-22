@@ -149,6 +149,24 @@
                     </button>
                   </div>
                 </td>
+
+                <td class="text-center">
+  <button class="btn btn-sm rounded-pill px-3 border" 
+          [class.btn-success-subtle]="nota.publicado"
+          [class.text-success]="nota.publicado"
+          [class.border-success-subtle]="nota.publicado"
+          [class.btn-danger-subtle]="!nota.publicado"
+          [class.text-danger]="!nota.publicado"
+          [class.border-danger-subtle]="!nota.publicado"
+          (click)="togglePublicado(nota)">
+    
+    @if (nota.publicado) {
+      <i class="bi bi-check-circle-fill me-1"></i> Publicado
+    } @else {
+      <i class="bi bi-pause-circle-fill me-1"></i> Borrador
+    }
+  </button>
+</td>
               </tr>
             } 
             
