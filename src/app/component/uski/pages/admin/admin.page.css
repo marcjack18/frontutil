@@ -1,3 +1,76 @@
 .sortable {
   cursor: pointer;
 }
+
+.sortable .sortable-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px; /* 2px extra spacing */
+}
+
+.sortable i {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  vertical-align: middle;
+  font-size: 0.95rem;
+}
+
+.list .card {
+  border: 1px solid #e6e6e6;
+}
+
+.table thead th {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.8rem;
+}
+
+.table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.table td,
+.table th {
+  vertical-align: middle;
+}
+
+.badge {
+  font-size: 0.75rem;
+}
+
+.generator-card {
+  max-width: 560px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .mobile-stack thead {
+    display: none;
+  }
+
+  .mobile-stack {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+  }
+
+  .mobile-stack colgroup,
+  .mobile-stack col {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-stack {
+    table-layout: fixed;
+  }
+
+  .mobile-stack .comment-col {
+    max-width: 340px;
+    width: 34ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

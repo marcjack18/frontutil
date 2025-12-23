@@ -1,20 +1,21 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { VisitasService } from '../../services/visitas';
+import { VisitasService } from '../../services/visitas.service';
 import { IVisita } from '../../types/visitas';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-admin-view-page',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink, MatSnackBarModule],
   templateUrl: './admin-view.page.html',
   styleUrl: './admin-view.page.css',
 })
 export class UskiAdminViewPage implements OnInit {
   private route = inject(ActivatedRoute);
-  private router = inject(Router);
   private visitasService = inject(VisitasService);
+  private snackBar = inject(MatSnackBar);
 
   oVisita: IVisita | null = null;
   loading = true;
@@ -40,12 +41,9 @@ export class UskiAdminViewPage implements OnInit {
       error: (err: HttpErrorResponse) => {
         this.error = 'Error cargando el registro';
         this.loading = false;
+        this.snackBar.open('Error cargando el registro', 'Cerrar', { duration: 4000 });
         console.error(err);
       },
     });
-  }
-
-  goBack() {
-    this.router.navigate(['/visitas/dashboard']);
   }
 }

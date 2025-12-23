@@ -29,11 +29,12 @@ import { RoutedUserPlist as RoutedUserPlistSilvestre } from './component/silvest
 import { RoutedUserView as RoutedUserViewSilvestre } from './component/silvestre/routed-user-view/routed-user-view';
 //
 import { UskiVisitasPage } from './component/uski/pages/visitas/visitas.page';
+import { UskiVisitasNewPage } from './component/uski/pages/visitas-new/visitas-new.page';
+import { UskiVisitasViewPage } from './component/uski/pages/visitas-view/visitas-view.page';
 import { UskiAdminPage } from './component/uski/pages/admin/admin.page';
 import { UskiAdminRemovePage } from './component/uski/pages/admin-remove/admin-remove.page';
 import { UskiAdminViewPage } from './component/uski/pages/admin-view/admin-view.page';
-import { UskiVisitasNewPage } from './component/uski/pages/visitas-new/visitas-new.page';
-import { UskiVisitasViewPage } from './component/uski/pages/visitas-view/visitas-view.page';
+import { UskiAdminEditPage } from './component/uski/pages/admin-edit/admin-edit.page';
 //
 import { RoutedAdminPlistCalinescu } from './component/calinescu/routed-admin-plist/routed-admin-plist';
 import { RoutedAdminViewCalinescu } from './component/calinescu/routed-admin-view/routed-admin-view';
@@ -190,14 +191,13 @@ export const routes: Routes = [
   { path: 'silvestre/edit/:id', component: RoutedAdminEditSilvestre, canActivate: [AdminGuard], canDeactivate: [PendingChangesGuard] },
   { path: 'silvestre/remove/:id', component: RoutedAdminRemoveSilvestre, canActivate: [AdminGuard] },
   // Vladislav Uski
-  // public
   { path: 'visitas', component: UskiVisitasPage },
-  { path: 'visitas/new', component: UskiVisitasNewPage },
+  { path: 'visitas/new', component: UskiVisitasNewPage, canDeactivate: [PendingChangesGuard]  },
   { path: 'visitas/view/:id', component: UskiVisitasViewPage },
-  // admin
-  { path: 'visitas/dashboard', component: UskiAdminPage },
-  { path: 'visitas/dashboard/view/:id', component: UskiAdminViewPage },
-  { path: 'visitas/dashboard/remove/:id', component: UskiAdminRemovePage },
+  { path: 'visitas/dashboard', component: UskiAdminPage, canActivate: [AdminGuard] },
+  { path: 'visitas/dashboard/view/:id', component: UskiAdminViewPage, canActivate: [AdminGuard] },
+  { path: 'visitas/dashboard/edit/:id', component: UskiAdminEditPage, canActivate: [AdminGuard], canDeactivate: [PendingChangesGuard] },
+  { path: 'visitas/dashboard/remove/:id', component: UskiAdminRemovePage, canActivate: [AdminGuard] },
   // Reyna (Frases Motivacionales) routes
   { path: 'reyna', component: ReynaUserPlist },
   { path: 'reyna/post/:id', component: ReynaUserView },

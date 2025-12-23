@@ -1,16 +1,26 @@
 <div class="container">
 
-  <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-3">
-    <h1 class="h4 mb-0">
-      <i class="bi bi-journal-text blog-icon me-2" aria-hidden="true"></i>
-      Libro de visita
-    </h1>
+  <div class="d-flex flex-column gap-3">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <h1 class="h4 mb-0">
+        <i class="bi bi-journal-text blog-icon me-2" aria-hidden="true"></i>
+        Libro de visita
+      </h1>
+      <a
+        class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center"
+        routerLink="/visitas"
+        title="Back to public list"
+      >
+        <i class="bi bi-arrow-left-square me-2" aria-hidden="true"></i>
+        Ir al Listado público
+      </a>
+    </div>
 
-    <div class="d-flex justify-content-center my-3">
-      <div class="card shadow-sm p-3 w-100" style="max-width: 720px">
-        <div class="d-flex flex-wrap align-items-center gap-3">
+    <div class="d-flex justify-content-center">
+      <div class="card shadow-sm p-3 generator-card">
+        <div class="d-flex flex-wrap align-items-center gap-3 justify-content-center justify-content-md-start">
           <label for="rellenaSelect" class="form-label m-0 fw-semibold"
-            >Generar fake datos:</label
+            >Generar datos:</label
           >
           <select
             #cantidadSel
@@ -25,7 +35,7 @@
           </select>
           <button
             class="btn btn-outline-primary btn-sm position-relative"
-            [disabled]="rellenando"
+            [disabled]="rellenando || deletingAll"
             (click)="generarFake()"
           >
             @if (rellenando) {
@@ -38,71 +48,83 @@
             <i class="bi bi-plus-circle me-2"></i>
             } Generar
           </button>
-
-          @if (rellenaOk) {
-          <div class="text-success small d-flex align-items-center">
-            <i class="bi bi-check-circle me-1"></i>{{ rellenaOk }} posts
-          </div>
-          } @if (rellenaError) {
-          <div class="text-danger small d-flex align-items-center">
-            <i class="bi bi-exclamation-triangle me-1"></i>{{ rellenaError }}
-          </div>
-          }
+          <button
+            class="btn btn-outline-danger btn-sm position-relative"
+            [disabled]="rellenando || deletingAll"
+            (click)="confirmDeleteDB()"
+          >
+            @if (deletingAll) {
+            <span
+              class="spinner-border spinner-border-sm me-2"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            } @if (!deletingAll) {
+            <i class="bi bi-trash me-2"></i>
+            } Eliminar todo
+          </button>
         </div>
       </div>
     </div>
-
-    <a
-      class="btn btn-outline-secondary btn-sm me-3 d-none d-md-inline-flex align-items-center"
-      routerLink="/visitas"
-      title="Back to public list"
-    >
-      <i class="bi bi-arrow-left-square me-2" aria-hidden="true"></i>
-      Volver
-    </a>
   </div>
 
   <div class="list">
+    <div class="d-flex justify-content-between align-items-center mt-3 gap-2">
+      <h5 class="mb-0">Total registros: <span class="fw-semibold">{{ totalElementsCount }}</span></h5>
+    </div>
+
     <div class="card shadow-sm mt-3">
       @if (!oPage?.content?.length) {
         <div class="p-4 text-center text-muted">No hay registros.</div>
       } @else {
         <div class="table-responsive">
-          <table class="table table-hover align-middle mb-0" style="table-layout: fixed; width: 100%;">
+          <table class="table table-striped table-bordered align-middle mb-0 mobile-stack">
             <colgroup>
-              <col style="width: 80px;" />
-              <col style="width: 180px;" />
+              <col style="width: 70px;" />
+              <col style="width: 150px;" />
               <col style="width: 320px;" />
               <col style="width: 120px;" />
               <col style="width: 160px;" />
               <col style="width: 160px;" />
               <col style="width: 160px;" />
             </colgroup>
-            <thead class="table-light">
+            <thead class="table-light align-middle">
               <tr>
                 <th scope="col" (click)="setSortColumn('id')" class="sortable" [class.sortable-active]="column === 'id'">
-                  <span>ID</span>
-                  <i class="bi" [ngClass]="column === 'id' ? (direction === 'asc' ? 'bi-caret-up-fill' : 'bi-caret-down-fill') : 'bi-caret-down'"></i>
+                  <span class="sortable-label">
+                    <span>ID</span>
+                    <i class="bi" [ngClass]="column === 'id' ? (direction === 'asc' ? 'bi-caret-up-fill' : 'bi-caret-down-fill') : 'bi-caret-down'"></i>
+                  </span>
                 </th>
                 <th scope="col" (click)="setSortColumn('nombre')" class="sortable" [class.sortable-active]="column === 'nombre'">
-                  <span>Nombre</span>
-                  <i class="bi" [ngClass]="column === 'nombre' ? (direction === 'asc' ? 'bi-caret-up-fill' : 'bi-caret-down-fill') : 'bi-caret-down'"></i>
+                  <span class="sortable-label">
+                    <span>Nombre</span>
+                    <i class="bi" [ngClass]="column === 'nombre' ? (direction === 'asc' ? 'bi-caret-up-fill' : 'bi-caret-down-fill') : 'bi-caret-down'"></i>
+                  </span>
                 </th>
-                <th scope="col" (click)="setSortColumn('comentario')" class="sortable" [class.sortable-active]="column === 'comentario'">
-                  <span>Comentario</span>
-                  <i class="bi" [ngClass]="column === 'comentario' ? (direction === 'asc' ? 'bi-caret-up-fill' : 'bi-caret-down-fill') : 'bi-caret-down'"></i>
+                <th scope="col" (click)="setSortColumn('comentario')" class="sortable comment-col" [class.sortable-active]="column === 'comentario'">
+                  <span class="sortable-label">
+                    <span>Comentario</span>
+                    <i class="bi" [ngClass]="column === 'comentario' ? (direction === 'asc' ? 'bi-caret-up-fill' : 'bi-caret-down-fill') : 'bi-caret-down'"></i>
+                  </span>
                 </th>
                 <th scope="col" (click)="setSortColumn('estaPublicado')" class="sortable" [class.sortable-active]="column === 'estaPublicado'">
-                  <span>Estado</span>
-                  <i class="bi" [ngClass]="column === 'estaPublicado' ? (direction === 'asc' ? 'bi-caret-up-fill' : 'bi-caret-down-fill') : 'bi-caret-down'"></i>
+                  <span class="sortable-label">
+                    <span>Estado</span>
+                    <i class="bi" [ngClass]="column === 'estaPublicado' ? (direction === 'asc' ? 'bi-caret-up-fill' : 'bi-caret-down-fill') : 'bi-caret-down'"></i>
+                  </span>
                 </th>
                 <th scope="col" (click)="setSortColumn('fechaCreacion')" class="sortable" [class.sortable-active]="column === 'fechaCreacion'">
-                  <span>Creado</span>
-                  <i class="bi" [ngClass]="column === 'fechaCreacion' ? (direction === 'asc' ? 'bi-caret-up-fill' : 'bi-caret-down-fill') : 'bi-caret-down'"></i>
+                  <span class="sortable-label">
+                    <span>Creado</span>
+                    <i class="bi" [ngClass]="column === 'fechaCreacion' ? (direction === 'asc' ? 'bi-caret-up-fill' : 'bi-caret-down-fill') : 'bi-caret-down'"></i>
+                  </span>
                 </th>
                 <th scope="col" (click)="setSortColumn('fechaModificacion')" class="sortable" [class.sortable-active]="column === 'fechaModificacion'">
-                  <span>Modificado</span>
-                  <i class="bi" [ngClass]="column === 'fechaModificacion' ? (direction === 'asc' ? 'bi-caret-up-fill' : 'bi-caret-down-fill') : 'bi-caret-down'"></i>
+                  <span class="sortable-label">
+                    <span>Modificado</span>
+                    <i class="bi" [ngClass]="column === 'fechaModificacion' ? (direction === 'asc' ? 'bi-caret-up-fill' : 'bi-caret-down-fill') : 'bi-caret-down'"></i>
+                  </span>
                 </th>
                 <th scope="col">Acciones</th>
               </tr>
