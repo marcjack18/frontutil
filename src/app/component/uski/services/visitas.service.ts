@@ -12,12 +12,12 @@ export class VisitasService {
 
   constructor(private oHttp: HttpClient) { }
 
-  getPagePublic(page: number, rpp: number, order: string = '', direction: string = ''): Observable<IPage<IVisita>> {
+  getPublicPage(page: number, rpp: number, order: string = '', direction: string = ''): Observable<IPage<IVisita>> {
     const sort = order && direction ? `${order},${direction}` : 'fechaCreacion,desc';
     return this.oHttp.get<IPage<IVisita>>(serverURL + `/visitas?page=${page}&size=${rpp}&sort=${sort}`);
   }
 
-  getPagePrivate(page: number, rpp: number, order: string, direction: string): Observable<IPage<IVisita>> {
+  getPageAdmin(page: number, rpp: number, order: string = '', direction: string = ''): Observable<IPage<IVisita>> {
     const sort = order && direction ? `${order},${direction}` : 'fechaCreacion,desc';
     return this.oHttp.get<IPage<IVisita>>(serverURL + `/visitas/dashboard?page=${page}&size=${rpp}&sort=${sort}`);
   }
@@ -30,12 +30,20 @@ export class VisitasService {
     return this.oHttp.post<number>(serverURL + '/visitas', visita);
   }
 
+  publish(visita: Partial<IVisita>): Observable<number> {
+    return this.oHttp.put<number>(serverURL + '/visitas/publish', visita);
+  }
+
   update(visita: Partial<IVisita>): Observable<number> {
-    return this.oHttp.put<number>(serverURL + '/visitas', visita);
+    return this.oHttp.put<number>(serverURL + '/visitas/update', visita);
   }
 
   delete(id: number): Observable<number> {
     return this.oHttp.delete<number>(serverURL + '/visitas/' + id);
+  }
+
+  deleteAll(): Observable<number> {
+    return this.oHttp.delete<number>(serverURL + '/visitas/delete_all');
   }
 
   rellenaBlog(numPosts: number): Observable<number> {

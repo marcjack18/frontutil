@@ -29,11 +29,12 @@ import { RoutedUserPlist as RoutedUserPlistSilvestre } from './component/silvest
 import { RoutedUserView as RoutedUserViewSilvestre } from './component/silvestre/routed-user-view/routed-user-view';
 //
 import { UskiVisitasPage } from './component/uski/pages/visitas/visitas.page';
+import { UskiVisitasNewPage } from './component/uski/pages/visitas-new/visitas-new.page';
+import { UskiVisitasViewPage } from './component/uski/pages/visitas-view/visitas-view.page';
 import { UskiAdminPage } from './component/uski/pages/admin/admin.page';
 import { UskiAdminRemovePage } from './component/uski/pages/admin-remove/admin-remove.page';
 import { UskiAdminViewPage } from './component/uski/pages/admin-view/admin-view.page';
-import { UskiVisitasNewPage } from './component/uski/pages/visitas-new/visitas-new.page';
-import { UskiVisitasViewPage } from './component/uski/pages/visitas-view/visitas-view.page';
+import { UskiAdminEditPage } from './component/uski/pages/admin-edit/admin-edit.page';
 //
 import { RoutedAdminPlistCalinescu } from './component/calinescu/routed-admin-plist/routed-admin-plist';
 import { RoutedAdminViewCalinescu } from './component/calinescu/routed-admin-view/routed-admin-view';
@@ -90,6 +91,7 @@ import { AlcaldeRoutedAdminRemove } from './component/alcalde/routed-admin-remov
 import { AlcaldeRoutedUserPlist } from './component/alcalde/routed-user-plist/routed-user-plist';
 import { AlcaldeRoutedUserView } from './component/alcalde/routed-user-view/routed-user-view';
 //
+import { SemperteguiRoutedUserView } from './component/sempertegui/routed-user-view/sempertegui-routed-user-view';
 import { SemperteguiRoutedUserPlist } from './component/sempertegui/routed-user-plist/sempertegui-routed-user-plist';
 import { SemperteguiRoutedAdminPlist } from './component/sempertegui/routed-admin-plist/sempertegui-routed-admin-plist';
 import { SemperteguiRoutedAdminView } from './component/sempertegui/routed-admin-view/sempertegui-routed-admin-view';
@@ -160,6 +162,7 @@ import { RoutedAdminRemoveZanon } from './component/zanon/routed-admin-remove/ro
 import { AdminGuard } from './guards/admin.guard';
 import { PallasPreview } from './component/pallas/pallas-preview/pallas-preview';
 import { PendingChangesGuard } from './guards/pending-changes.guard';
+
 //
 export const routes: Routes = [
   { path: '', component: Home },
@@ -190,14 +193,13 @@ export const routes: Routes = [
   { path: 'silvestre/edit/:id', component: RoutedAdminEditSilvestre, canActivate: [AdminGuard], canDeactivate: [PendingChangesGuard] },
   { path: 'silvestre/remove/:id', component: RoutedAdminRemoveSilvestre, canActivate: [AdminGuard] },
   // Vladislav Uski
-  // public
   { path: 'visitas', component: UskiVisitasPage },
-  { path: 'visitas/new', component: UskiVisitasNewPage },
+  { path: 'visitas/new', component: UskiVisitasNewPage, canDeactivate: [PendingChangesGuard]  },
   { path: 'visitas/view/:id', component: UskiVisitasViewPage },
-  // admin
-  { path: 'visitas/dashboard', component: UskiAdminPage },
-  { path: 'visitas/dashboard/view/:id', component: UskiAdminViewPage },
-  { path: 'visitas/dashboard/remove/:id', component: UskiAdminRemovePage },
+  { path: 'visitas/dashboard', component: UskiAdminPage, canActivate: [AdminGuard] },
+  { path: 'visitas/dashboard/view/:id', component: UskiAdminViewPage, canActivate: [AdminGuard] },
+  { path: 'visitas/dashboard/edit/:id', component: UskiAdminEditPage, canActivate: [AdminGuard], canDeactivate: [PendingChangesGuard] },
+  { path: 'visitas/dashboard/remove/:id', component: UskiAdminRemovePage, canActivate: [AdminGuard] },
   // Reyna (Frases Motivacionales) routes
   { path: 'reyna', component: ReynaUserPlist },
   { path: 'reyna/post/:id', component: ReynaUserView },
@@ -243,11 +245,11 @@ export const routes: Routes = [
   //
   { path: 'palomares', component: RoutedUserPlistPalomares },
   { path: 'palomares/task/:id', component: RoutedUserViewPalomares },
-  { path: 'palomares/plist', component: RoutedAdminPlistPalomares },
-  { path: 'palomares/view/:id', component: RoutedAdminViewPalomares },
-  { path: 'palomares/new', component: RoutedAdminNewPalomares },
-  { path: 'palomares/edit/:id', component: RoutedAdminEditPalomares },
-  { path: 'palomares/remove/:id', component: RoutedAdminRemovePalomares },
+  { path: 'palomares/plist', component: RoutedAdminPlistPalomares, canActivate: [AdminGuard] },
+  { path: 'palomares/view/:id', component: RoutedAdminViewPalomares, canActivate: [AdminGuard] },
+  { path: 'palomares/new', component: RoutedAdminNewPalomares, canActivate: [AdminGuard], canDeactivate: [PendingChangesGuard] },
+  { path: 'palomares/edit/:id', component: RoutedAdminEditPalomares, canActivate: [AdminGuard], canDeactivate: [PendingChangesGuard] },
+  { path: 'palomares/remove/:id', component: RoutedAdminRemovePalomares, canActivate: [AdminGuard] },
   // Rutas de Joan Salinas
   { path: 'receta', component: SalinasRoutedUserPlist, },
   { path: 'receta/post/:id', component: SalinasRoutedUserView },
@@ -267,35 +269,36 @@ export const routes: Routes = [
   //
   { path: 'alfonso', component: RoutedAlfonsoUserPlist },
   { path: 'alfonso/respuesta/:id', component: RoutedAlfonsoUserView },
-  { path: 'alfonso/plist', component: RoutedAlfonsoAdminPlist },
-  { path: 'alfonso/view/:id', component: RoutedAlfonsoAdminView },
-  { path: 'alfonso/new', component: RoutedAlfonsoAdminNew },
-  { path: 'alfonso/edit/:id', component: RoutedAlfonsoAdminEdit },
-  { path: 'alfonso/remove/:id', component: RoutedAlfonsoAdminRemove },
+  { path: 'alfonso/plist', component: RoutedAlfonsoAdminPlist, canActivate: [AdminGuard] },
+  { path: 'alfonso/view/:id', component: RoutedAlfonsoAdminView, canActivate: [AdminGuard] },
+  { path: 'alfonso/new', component: RoutedAlfonsoAdminNew, canActivate: [AdminGuard], canDeactivate: [PendingChangesGuard] },
+  { path: 'alfonso/edit/:id', component: RoutedAlfonsoAdminEdit, canActivate: [AdminGuard], canDeactivate: [PendingChangesGuard] },
+  { path: 'alfonso/remove/:id', component: RoutedAlfonsoAdminRemove, canActivate: [AdminGuard] },
   //
   { path: 'alcalde', component: AlcaldeRoutedUserPlist },
   { path: 'alcalde/post/:id', component: AlcaldeRoutedUserView },
-  { path: 'alcalde/plist', component: AlcaldeRoutedAdminPlist },
-  { path: 'alcalde/view/:id', component: AlcaldeRoutedAdminView },
-  { path: 'alcalde/new', component: AlcaldeRoutedAdminNew },
-  { path: 'alcalde/edit/:id', component: AlcaldeRoutedAdminEdit },
-  { path: 'alcalde/remove/:id', component: AlcaldeRoutedAdminRemove },
+  { path: 'alcalde/plist', component: AlcaldeRoutedAdminPlist, canActivate: [AdminGuard] },
+  { path: 'alcalde/view/:id', component: AlcaldeRoutedAdminView, canActivate: [AdminGuard] },
+  { path: 'alcalde/new', component: AlcaldeRoutedAdminNew, canActivate: [AdminGuard], canDeactivate: [PendingChangesGuard] },
+  { path: 'alcalde/edit/:id', component: AlcaldeRoutedAdminEdit, canActivate: [AdminGuard], canDeactivate: [PendingChangesGuard] },
+  { path: 'alcalde/remove/:id', component: AlcaldeRoutedAdminRemove, canActivate: [AdminGuard] },
   //
   { path: 'sempertegui', component: SemperteguiRoutedUserPlist },
-  { path: 'sempertegui/plist', component: SemperteguiRoutedAdminPlist },
-  { path: 'sempertegui/view/:id', component: SemperteguiRoutedAdminView },
-  { path: 'sempertegui/edit/:id', component: SemperteguiRoutedAdminEdit },
-  { path: 'sempertegui/remove/:id', component: SemperteguiRoutedAdminRemove },
-  { path: 'sempertegui/new', component: SemperteguiRoutedAdminNew },
+  { path: 'sempertegui/post/:id', component: SemperteguiRoutedUserView },
+  { path: 'sempertegui/plist', component: SemperteguiRoutedAdminPlist, canActivate: [AdminGuard] },
+  { path: 'sempertegui/view/:id', component: SemperteguiRoutedAdminView, canActivate: [AdminGuard] },
+  { path: 'sempertegui/new', component: SemperteguiRoutedAdminNew, canActivate: [AdminGuard], canDeactivate: [PendingChangesGuard] },
+  { path: 'sempertegui/edit/:id', component: SemperteguiRoutedAdminEdit, canActivate: [AdminGuard], canDeactivate: [PendingChangesGuard] },
+  { path: 'sempertegui/remove/:id', component: SemperteguiRoutedAdminRemove, canActivate: [AdminGuard] },
   //
   { path: 'alcanyiz', component: RoutedAlcanyizMenu },
   { path: 'alcanyiz/allquestion', component: RoutedAlcanyizUserList },
   { path: 'alcanyiz/question/:id', component: RoutedAlcanyizUserView },
-  { path: 'alcanyiz/questionlist', component: RoutedAlcanyizAdminQuestionlist },
-  { path: 'alcanyiz/questionview/:id', component: RoutedAlcanyizAdminView },
-  { path: 'alcanyiz/questioncreate', component: RoutedAlcanyizAdminCreate },
-  { path: 'alcanyiz/questionedit/:id', component: RoutedAlcanyizAdminEdit },
-  { path: 'alcanyiz/questionremove/:id', component: RoutedAlcanyizAdminRemove },
+  { path: 'alcanyiz/questionlist', component: RoutedAlcanyizAdminQuestionlist, canActivate: [AdminGuard] },
+  { path: 'alcanyiz/questionview/:id', component: RoutedAlcanyizAdminView , canActivate: [AdminGuard]},
+  { path: 'alcanyiz/questioncreate', component: RoutedAlcanyizAdminCreate, canActivate: [AdminGuard], canDeactivate: [PendingChangesGuard] },
+  { path: 'alcanyiz/questionedit/:id', component: RoutedAlcanyizAdminEdit, canActivate: [AdminGuard], canDeactivate: [PendingChangesGuard] },
+  { path: 'alcanyiz/questionremove/:id', component: RoutedAlcanyizAdminRemove, canActivate: [AdminGuard] },
   { path: 'alcanyiz/questiongame', component: RoutedAlcanyizGame },
   { path: 'soares/user/plist', component: SoaresRoutedUserPlist },
   { path: 'soares/user/view/:id', component: SoaresRoutedUserView },
@@ -309,17 +312,17 @@ export const routes: Routes = [
   //
   { path: 'tablon', component: TablonRoutedUserPlist },
   { path: 'tablon/post/:id', component: TablonRoutedUserView },
-  { path: 'tablon/plist', component: TablonRoutedAdminPlist },
-  { path: 'tablon/view/:id', component: TablonRoutedAdminView },
-  { path: 'tablon/new', component: TablonRoutedAdminNew },
-  { path: 'tablon/edit/:id', component: TablonRoutedAdminEdit },
-  { path: 'tablon/remove/:id', component: TablonRoutedAdminRemove },
+  { path: 'tablon/plist', component: TablonRoutedAdminPlist, canActivate: [AdminGuard] },
+  { path: 'tablon/view/:id', component: TablonRoutedAdminView, canActivate: [AdminGuard] },
+  { path: 'tablon/new', component: TablonRoutedAdminNew, canActivate: [AdminGuard], canDeactivate: [PendingChangesGuard] },
+  { path: 'tablon/edit/:id', component: TablonRoutedAdminEdit, canActivate: [AdminGuard], canDeactivate: [PendingChangesGuard] },
+  { path: 'tablon/remove/:id', component: TablonRoutedAdminRemove, canActivate: [AdminGuard] },
   //
   { path: 'zanon', component: RoutedUserPlistZanon },
   { path: 'zanon/post/:id', component: RoutedUserViewZanon },
-  { path: 'zanon/plist', component: RoutedAdminPlistZanon },
-  { path: 'zanon/view/:id', component: RoutedAdminViewZanon },
-  { path: 'zanon/new', component: RoutedAdminNewZanon },
-  { path: 'zanon/edit/:id', component: RoutedAdminEditZanon },
-  { path: 'zanon/remove/:id', component: RoutedAdminRemoveZanon },
+  { path: 'zanon/plist', component: RoutedAdminPlistZanon, canActivate: [AdminGuard] },
+  { path: 'zanon/view/:id', component: RoutedAdminViewZanon, canActivate: [AdminGuard] },
+  { path: 'zanon/new', component: RoutedAdminNewZanon, canActivate: [AdminGuard] },
+  { path: 'zanon/edit/:id', component: RoutedAdminEditZanon, canActivate: [AdminGuard] },
+  { path: 'zanon/remove/:id', component: RoutedAdminRemoveZanon, canActivate: [AdminGuard] },
 ];
