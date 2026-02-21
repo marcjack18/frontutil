@@ -1,4 +1,4 @@
-export const serverURL = 'http://172.16.1.234';
+export const serverURL = 'http://172.16.1.234/api';
 
 export const neighborhood = 2;
 
