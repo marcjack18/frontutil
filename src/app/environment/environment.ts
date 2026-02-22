@@ -1,4 +1,4 @@
-export const serverURL = 'http://172.16.1.234/api';
+export const serverURL = 'http://pro.ausiasmarch.es:51105/api';
 
 export const neighborhood = 2;
 
